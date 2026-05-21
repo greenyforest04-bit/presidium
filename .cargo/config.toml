@@ -1,0 +1,16 @@
+[build]
+# Enable incremental compilation for dev builds
+incremental = true
+
+[term]
+# Use colors in terminal output
+color = "auto"
+# Verbose mode
+verbose = false
+
+# Android NDK linker configuration (for future mobile builds)
+# [target.aarch64-linux-android]
+# linker = "path/to/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android33-clang"
+#
+# [target.x86_64-linux-android]
+# linker = "path/to/ndk/toolchains/llvm/prebuilt/linux-x86_64/bin/x86_64-linux-android33-clang"

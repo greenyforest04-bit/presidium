@@ -1,0 +1,26 @@
+[package]
+name = "presidium-crypto"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+description = "E2EE crypto ports and adapters for Presidium Messenger — Signal protocol, PQXDH, Double Ratchet"
+
+[dependencies]
+presidium-core = { path = "../presidium-core" }
+tokio = { workspace = true }
+tracing = { workspace = true }
+thiserror = { workspace = true }
+serde = { workspace = true }
+async-trait = { workspace = true }
+bytes = { workspace = true }
+hex = { workspace = true }
+base64 = { workspace = true }
+
+[dev-dependencies]
+tokio-test = { workspace = true }
+proptest = { workspace = true }
+mockall = { workspace = true }
+
+[lints]
+workspace = true

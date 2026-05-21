@@ -1,0 +1,44 @@
+# Rust
+/target/
+**/*.rs.bk
+Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+
+# Build artifacts
+*.d
+*.rlib
+*.dll
+*.dylib
+*.so
+*.exe
+
+# Coverage
+tarpaulin-report.html
+cobertura.xml
+lcov.info
+
+# Profiling
+flamegraph.svg
+perf.data
+perf.data.old
+
+# Models (large files)
+models/*.gguf
+
+# Data
+data/
+*.db

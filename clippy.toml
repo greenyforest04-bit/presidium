@@ -1,0 +1,20 @@
+# Presidium Messenger — Clippy configuration
+# See: https://doc.rust-lang.org/clippy/configuration.html
+
+# Cognitive complexity threshold
+cognitive-complexity-threshold = 30
+
+# Maximum number of lines in a function
+too-many-arguments-threshold = 8
+
+# Type complexity threshold
+type-complexity-threshold = 250
+
+# Maximum size for types on the stack
+trivial-copy-size-limit = 16
+
+# Single character binding names to allow
+allowed-idents-below-min-chars = ["i", "j", "k", "n", "x", "y", "z", "id", "_"]
+
+# Standard macros that are allowed to have uppercase identifiers
+standard-macro-braces = []

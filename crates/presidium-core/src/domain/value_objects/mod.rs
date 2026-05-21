@@ -195,6 +195,73 @@ impl std::fmt::Display for ChatId {
     }
 }
 
+/// Unique identifier for a message in the Presidium network.
+///
+/// Each message is identified by a UUID v4, generated at creation time.
+/// This is a value object wrapping a `uuid::Uuid` for type safety.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct MessageId(uuid::Uuid);
+
+impl MessageId {
+    /// Creates a new `MessageId` from a UUID.
+    #[must_use]
+    pub fn new(id: uuid::Uuid) -> Self {
+        Self(id)
+    }
+
+    /// Generates a new random `MessageId`.
+    #[must_use]
+    pub fn random() -> Self {
+        Self(uuid::Uuid::new_v4())
+    }
+
+    /// Returns the underlying UUID.
+    #[must_use]
+    pub fn as_uuid(&self) -> uuid::Uuid {
+        self.0
+    }
+}
+
+impl std::fmt::Display for MessageId {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
+/// A Unix timestamp in milliseconds.
+///
+/// Used for consistent timestamp representation across the domain,
+/// especially in storage and P2P protocol messages where `DateTime<Utc>`
+/// is not suitable for serialization or wire format.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash, Serialize, Deserialize)]
+pub struct Timestamp(i64);
+
+impl Timestamp {
+    /// Creates a new `Timestamp` from a Unix millisecond value.
+    #[must_use]
+    pub fn new(millis: i64) -> Self {
+        Self(millis)
+    }
+
+    /// Returns the current time as a `Timestamp`.
+    #[must_use]
+    pub fn now() -> Self {
+        Self(chrono::Utc::now().timestamp_millis())
+    }
+
+    /// Returns the raw Unix millisecond value.
+    #[must_use]
+    pub fn as_millis(&self) -> i64 {
+        self.0
+    }
+}
+
+impl std::fmt::Display for Timestamp {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.0)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -262,5 +329,31 @@ mod tests {
         assert_eq!(json, "\"Direct\"");
         let decoded: ChatType = serde_json::from_str(&json).expect("deserialize");
         assert_eq!(decoded, direct);
+    }
+
+    #[test]
+    fn message_id_random_is_unique() {
+        let a = MessageId::random();
+        let b = MessageId::random();
+        assert_ne!(a, b);
+    }
+
+    #[test]
+    fn message_id_display() {
+        let mid = MessageId::new(uuid::Uuid::parse_str("550e8400-e29b-41d4-a716-446655440000").unwrap());
+        assert!(format!("{mid}").contains("550e8400"));
+    }
+
+    #[test]
+    fn timestamp_now_is_positive() {
+        let ts = Timestamp::now();
+        assert!(ts.as_millis() > 0);
+    }
+
+    #[test]
+    fn timestamp_new_and_display() {
+        let ts = Timestamp::new(1_700_000_000_000_i64);
+        assert_eq!(ts.as_millis(), 1_700_000_000_000_i64);
+        assert_eq!(format!("{ts}"), "1700000000000");
     }
 }

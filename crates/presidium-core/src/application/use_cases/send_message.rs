@@ -2,10 +2,10 @@
 //!
 //! This use case coordinates the following steps:
 //! 1. Validate the message content against domain rules
-//! 2. Encrypt the message using the E2EE crypto port
-//! 3. Send the encrypted message via the messaging transport port
-//! 4. Store the message locally via the storage port
-//! 5. Optionally, analyze the content via the moderation port
+//! 2. Moderate the content using on-device LLM
+//! 3. Encrypt the message using the E2EE crypto port
+//! 4. Send the encrypted message via the messaging transport port
+//! 5. Store the message locally via the storage port
 
 use crate::application::ports::crypto_port::E2EECryptoPort;
 use crate::application::ports::messaging_port::MessageTransportPort;
@@ -138,7 +138,9 @@ mod tests {
     use super::*;
     use crate::application::ports::crypto_port::{CryptoError, PreKeyBundle};
     use crate::application::ports::messaging_port::TransportError;
-    use crate::application::ports::moderation_port::{ModerationError, ModerationResult};
+    use crate::application::ports::moderation_port::{
+        ContentVerdict, ModerationError, ModerationResult,
+    };
     use crate::application::ports::storage_port::StorageError;
     use crate::domain::value_objects::DeviceId;
     use async_trait::async_trait;
@@ -156,6 +158,7 @@ mod tests {
             async fn decrypt_message(&self, session_id: &SessionId, ciphertext: &[u8]) -> Result<Vec<u8>, CryptoError>;
             async fn delete_session(&self, session_id: &SessionId) -> Result<(), CryptoError>;
             async fn list_sessions(&self) -> Result<Vec<SessionId>, CryptoError>;
+            async fn rotate_ratchet(&self, session_id: &SessionId) -> Result<(), CryptoError>;
         }
     }
 
@@ -191,6 +194,8 @@ mod tests {
         #[async_trait]
         impl ModerationPort for ModerationPortMock {
             async fn analyze_content(&self, content: &str) -> Result<ModerationResult, ModerationError>;
+            async fn check_message(&self, sender: &UserId, plaintext: &str) -> Result<ContentVerdict, ModerationError>;
+            async fn create_sarcophagus(&self, offender: &UserId, evidence: &str, reason: &str) -> Result<Vec<u8>, ModerationError>;
             async fn is_model_ready(&self) -> Result<bool, ModerationError>;
             async fn load_model(&self, model_path: &str) -> Result<(), ModerationError>;
             async fn unload_model(&self) -> Result<(), ModerationError>;
@@ -251,9 +256,7 @@ mod tests {
         moderation_mock.expect_analyze_content().returning(|_| {
             Ok(ModerationResult {
                 violation_detected: true,
-                category: Some(
-                    crate::application::ports::moderation_port::ModerationCategory::Extremism,
-                ),
+                category: Some(crate::domain::events::ModerationCategory::Extremism),
                 confidence: 0.95,
                 explanation: "Extremist content detected".to_string(),
             })

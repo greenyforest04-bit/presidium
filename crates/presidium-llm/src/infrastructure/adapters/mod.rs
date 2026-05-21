@@ -1,6 +1,7 @@
 //! LLM adapter implementations.
 
-// Stub: LLM adapters will be implemented in subsequent development days.
-// Planned adapters:
-// - CandleLlmAdapter (implements ModerationPort via candle.rs)
-// - LlamaCppAdapter (implements ModerationPort via llama-cpp-rs)
+mod candle_llm_adapter;
+mod local_moderation_adapter;
+
+pub use candle_llm_adapter::CandleLlmAdapter;
+pub use local_moderation_adapter::LocalModerationAdapter;

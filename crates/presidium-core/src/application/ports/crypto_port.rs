@@ -119,4 +119,12 @@ pub trait E2EECryptoPort: Send + Sync {
 
     /// Lists all active session identifiers for the local device.
     async fn list_sessions(&self) -> Result<Vec<SessionId>, CryptoError>;
+
+    /// Rotates the Double Ratchet for the given session.
+    ///
+    /// This should be called periodically or after a configurable number
+    /// of messages to ensure post-compromise security. A ratchet rotation
+    /// performs a DH step that creates a new chain key, making previously
+    /// compromised keys unusable for decrypting future messages.
+    async fn rotate_ratchet(&self, session_id: &SessionId) -> Result<(), CryptoError>;
 }

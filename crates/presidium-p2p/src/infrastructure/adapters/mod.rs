@@ -1,5 +1,5 @@
 //! P2P adapter implementations.
 
-// Stub: P2P adapters will be implemented in subsequent development days.
-// Planned adapters:
-// - Libp2pNetworkAdapter (implements P2PNetworkPort)
+mod libp2p_network_adapter;
+
+pub use libp2p_network_adapter::Libp2pNetworkAdapter;

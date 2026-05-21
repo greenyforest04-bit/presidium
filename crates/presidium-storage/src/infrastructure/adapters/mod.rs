@@ -1,6 +1,5 @@
 //! Storage adapter implementations.
 
-// Stub: Storage adapters will be implemented in subsequent development days.
-// Planned adapters:
-// - SqlCipherStorageAdapter (implements StoragePort)
-// - InMemoryStorageAdapter (for testing)
+mod redb_storage_adapter;
+
+pub use redb_storage_adapter::RedbStorageAdapter;

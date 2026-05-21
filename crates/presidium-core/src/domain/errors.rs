@@ -67,10 +67,7 @@ mod tests {
 
     #[test]
     fn domain_error_message_too_large_display() {
-        let err = DomainError::MessageTooLarge {
-            actual: 100_000,
-            max: 65_536,
-        };
+        let err = DomainError::MessageTooLarge { actual: 100_000, max: 65_536 };
         let msg = format!("{err}");
         assert!(msg.contains("100000"));
         assert!(msg.contains("65536"));
@@ -78,18 +75,14 @@ mod tests {
 
     #[test]
     fn domain_error_invalid_operation_display() {
-        let err = DomainError::InvalidOperation {
-            reason: "test reason".to_string(),
-        };
+        let err = DomainError::InvalidOperation { reason: "test reason".to_string() };
         assert!(format!("{err}").contains("test reason"));
     }
 
     #[test]
     fn domain_error_not_found_display() {
-        let err = DomainError::NotFound {
-            entity_type: "User".to_string(),
-            id: "alice".to_string(),
-        };
+        let err =
+            DomainError::NotFound { entity_type: "User".to_string(), id: "alice".to_string() };
         let msg = format!("{err}");
         assert!(msg.contains("User"));
         assert!(msg.contains("alice"));

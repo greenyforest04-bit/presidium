@@ -1,5 +1,8 @@
 # Presidium Messenger — Rust formatting configuration
 # See: https://rust-lang.github.io/rustfmt/
+#
+# Only stable options are used to ensure CI compatibility.
+# Unstable/nightly-only options are intentionally omitted.
 
 # Maximum line width
 max_width = 100
@@ -7,31 +10,11 @@ max_width = 100
 # Use small heuristics for various constructs
 use_small_heuristics = "Max"
 
-# Import grouping and ordering
-imports_granularity = "Module"
-group_imports = "StdExternalCrate"
+# Import ordering
 reorder_imports = true
 
 # Function arguments layout
 fn_params_layout = "Tall"
-
-# Where clause style
-where_single_line = false
-
-# Struct literal style
-struct_lit_single_line = false
-
-# Force uniform formatting
-force_uniform_combining = true
-
-# Format code in doc comments
-format_code_in_doc_comments = true
-
-# Wrap comments to fit within max_width
-wrap_comments = true
-
-# Format string literals that are too long
-format_strings = false
 
 # Chain width for method chaining
 chain_width = 60
@@ -41,3 +24,17 @@ single_line_if_else_max_width = 50
 
 # Edition
 edition = "2021"
+
+# ──────────────────────────────────────────────────────────
+# The following options are unstable (require nightly rustfmt)
+# and cause CI failures on stable. They are commented out
+# until we either switch to nightly or they become stable.
+# ──────────────────────────────────────────────────────────
+# imports_granularity = "Module"        # unstable — rename: import_granularity
+# group_imports = "StdExternalCrate"    # unstable
+# wrap_comments = true                  # unstable
+# format_strings = false                # unstable
+# where_single_line = false             # removed in recent rustfmt
+# struct_lit_single_line = false        # not a valid config key
+# force_uniform_combining = true        # unstable
+# format_code_in_doc_comments = true    # unstable

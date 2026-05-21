@@ -228,7 +228,8 @@ mod tests {
 
     #[test]
     fn message_content_valid() {
-        let content = MessageContent::try_new("Hello, Presidium!".to_string()).expect("valid content");
+        let content =
+            MessageContent::try_new("Hello, Presidium!".to_string()).expect("valid content");
         assert_eq!(content.as_str(), "Hello, Presidium!");
         assert_eq!(content.len(), 17);
         assert!(!content.is_empty());

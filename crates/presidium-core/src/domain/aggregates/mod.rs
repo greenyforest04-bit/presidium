@@ -40,31 +40,19 @@ impl Conversation {
     /// Creates a new direct conversation between two users.
     pub fn new_direct(user_a: UserId, user_b: UserId) -> Result<Self, DomainError> {
         let chat = Chat::new_direct(user_a, user_b)?;
-        Ok(Self {
-            chat,
-            messages: Vec::new(),
-            pending_events: Vec::new(),
-        })
+        Ok(Self { chat, messages: Vec::new(), pending_events: Vec::new() })
     }
 
     /// Creates a new group conversation with the given participants.
     pub fn new_group(participants: Vec<UserId>) -> Result<Self, DomainError> {
         let chat = Chat::new_group(participants)?;
-        Ok(Self {
-            chat,
-            messages: Vec::new(),
-            pending_events: Vec::new(),
-        })
+        Ok(Self { chat, messages: Vec::new(), pending_events: Vec::new() })
     }
 
     /// Reconstructs a conversation from existing state (for repository loading).
     #[must_use]
     pub fn from_parts(chat: Chat, messages: Vec<Message>) -> Self {
-        Self {
-            chat,
-            messages,
-            pending_events: Vec::new(),
-        }
+        Self { chat, messages, pending_events: Vec::new() }
     }
 
     /// Sends a message in this conversation.
@@ -74,11 +62,7 @@ impl Conversation {
     /// - The sender is not a participant
     /// - The message content exceeds size limits
     /// - A moderation violation is detected
-    pub fn send_message(
-        &mut self,
-        sender_id: UserId,
-        content: String,
-    ) -> Result<(), DomainError> {
+    pub fn send_message(&mut self, sender_id: UserId, content: String) -> Result<(), DomainError> {
         // Validate sender is a participant
         if !self.chat.participants().iter().any(|p| p == &sender_id) {
             return Err(DomainError::InvalidOperation {
@@ -90,11 +74,8 @@ impl Conversation {
         let content = MessageContent::try_new(content)?;
 
         // Create the message
-        let message = Message::try_new(
-            self.chat.chat_id().clone(),
-            sender_id,
-            content.as_str().to_string(),
-        )?;
+        let message =
+            Message::try_new(self.chat.chat_id().clone(), sender_id, content.as_str().to_string())?;
 
         // Emit domain event
         let event = MessageSent {
@@ -147,9 +128,7 @@ impl Conversation {
         }
         if self.chat.participants().len() >= MAX_GROUP_PARTICIPANTS {
             return Err(DomainError::InvalidOperation {
-                reason: format!(
-                    "Group chat cannot exceed {MAX_GROUP_PARTICIPANTS} participants"
-                ),
+                reason: format!("Group chat cannot exceed {MAX_GROUP_PARTICIPANTS} participants"),
             });
         }
         // Note: Chat entity doesn't expose mutable participants yet,

@@ -1,26 +1,25 @@
 # Presidium Messenger — cargo-deny configuration
 # See: https://embarkstudios.github.io/cargo-deny/
+# Compatible with cargo-deny 0.14+
 
-# Deny certain licenses and check for vulnerabilities and advisories
+# ── Dependency graph ──────────────────────────────────────
+[graph]
+targets = []
+all-features = false
+no-default-features = false
 
+[output]
+feature-depth = 1
+
+# ── Advisories ────────────────────────────────────────────
+# All advisories are denied by default.
+# Use `ignore` to suppress specific advisory IDs.
 [advisories]
-# The database of advisories to use
-db-path = "~/.cargo/advisory-db"
-# The URL of the advisory database
 db-urls = ["https://github.com/rustsec/advisory-db"]
-# How to handle advisories
-vulnerability = "deny"
-unmaintained = "warn"
-unsound = "deny"
-yanked = "warn"
-notice = "warn"
-# Ignore specific advisories (add as needed)
 ignore = []
 
+# ── Licenses ──────────────────────────────────────────────
 [licenses]
-# Deny unlicensed code
-unlicensed = "deny"
-# Allow these licenses
 allow = [
     "MIT",
     "Apache-2.0",
@@ -33,33 +32,40 @@ allow = [
     "CC0-1.0",
     "MPL-2.0",
     "AGPL-3.0",
+    "AGPL-3.0-or-later",
+    "Unicode-3.0",
 ]
-# Confidence threshold for license detection
 confidence-threshold = 0.8
-# Private crates that don't need license checks
-private = { ignore = true }
 
 [[licenses.clarify]]
 name = "ring"
 expression = "MIT AND ISC AND OpenSSL"
 license-files = [{ path = "LICENSE", hash = 0xbd0eed23 }]
 
+[licenses.private]
+ignore = true
+registries = []
+
+# ── Bans ──────────────────────────────────────────────────
 [bans]
-# Warn about multiple versions of the same crate
 multiple-versions = "warn"
-# Warn about wildcard dependencies
 wildcards = "warn"
-# Highlight certain crates that should be avoided
+highlight = "all"
+workspace-default-features = "allow"
+external-default-features = "allow"
+allow = []
 deny = []
-# Certain crates that are allowed to have duplicates
 skip = []
 skip-tree = []
 
+# ── Sources ───────────────────────────────────────────────
 [sources]
-# Deny crates from unknown registries
 unknown-registry = "deny"
 unknown-git = "deny"
-# Allow crates.io
 allow-registry = ["https://github.com/rust-lang/crates.io-index"]
-# Allow specific git repositories
 allow-git = []
+
+[sources.allow-org]
+github = []
+gitlab = []
+bitbucket = []

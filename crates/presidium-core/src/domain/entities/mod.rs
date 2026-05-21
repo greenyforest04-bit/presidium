@@ -125,13 +125,7 @@ impl Device {
     #[must_use]
     pub fn new(device_id: DeviceId, name: String) -> Self {
         let now = Utc::now();
-        Self {
-            device_id,
-            name,
-            is_online: false,
-            registered_at: now,
-            last_seen_at: now,
-        }
+        Self { device_id, name, is_online: false, registered_at: now, last_seen_at: now }
     }
 
     /// Returns a reference to the device's identifier.
@@ -433,21 +427,17 @@ mod tests {
 
     #[test]
     fn direct_chat_creation() {
-        let chat = Chat::new_direct(
-            UserId::new("alice".to_string()),
-            UserId::new("bob".to_string()),
-        )
-        .expect("valid direct chat");
+        let chat =
+            Chat::new_direct(UserId::new("alice".to_string()), UserId::new("bob".to_string()))
+                .expect("valid direct chat");
         assert_eq!(chat.chat_type(), ChatType::Direct);
         assert_eq!(chat.participants().len(), 2);
     }
 
     #[test]
     fn direct_chat_with_self_fails() {
-        let result = Chat::new_direct(
-            UserId::new("alice".to_string()),
-            UserId::new("alice".to_string()),
-        );
+        let result =
+            Chat::new_direct(UserId::new("alice".to_string()), UserId::new("alice".to_string()));
         assert!(result.is_err());
     }
 

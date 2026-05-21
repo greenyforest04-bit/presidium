@@ -61,7 +61,9 @@ impl AppConfig {
     /// Returns a `figment::Error` if the configuration is invalid or
     /// cannot be loaded.
     pub fn load() -> Result<Self, figment::Error> {
-        use figment::{providers::Env, providers::Format, providers::Serialized, providers::Toml, Figment};
+        use figment::{
+            providers::Env, providers::Format, providers::Serialized, providers::Toml, Figment,
+        };
 
         Figment::from(Serialized::defaults(Self::default()))
             .merge(Toml::file("presidium.toml"))
@@ -74,7 +76,9 @@ impl AppConfig {
     /// # Errors
     /// Returns a `figment::Error` if the configuration is invalid.
     pub fn load_from(path: &str) -> Result<Self, figment::Error> {
-        use figment::{providers::Env, providers::Format, providers::Serialized, providers::Toml, Figment};
+        use figment::{
+            providers::Env, providers::Format, providers::Serialized, providers::Toml, Figment,
+        };
 
         Figment::from(Serialized::defaults(Self::default()))
             .merge(Toml::file(path))
@@ -144,11 +148,7 @@ pub struct CryptoConfig {
 
 impl Default for CryptoConfig {
     fn default() -> Self {
-        Self {
-            pre_key_count: 100,
-            enable_post_quantum: true,
-            pre_key_rotation_hours: 24,
-        }
+        Self { pre_key_count: 100, enable_post_quantum: true, pre_key_rotation_hours: 24 }
     }
 }
 

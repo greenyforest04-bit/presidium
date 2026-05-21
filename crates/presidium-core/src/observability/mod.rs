@@ -42,8 +42,8 @@ use tracing_subscriber::{fmt, EnvFilter};
 /// presidium_core::observability::init_tracing("info");
 /// ```
 pub fn init_tracing(default_level: &str) {
-    let filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new(default_level));
+    let filter =
+        EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new(default_level));
 
     if cfg!(debug_assertions) {
         // Development: pretty, colorful output
@@ -73,8 +73,7 @@ pub fn init_tracing(default_level: &str) {
 /// This is intended for use in integration tests and should not
 /// be called in production code.
 pub fn init_test_tracing() {
-    let filter = EnvFilter::try_from_default_env()
-        .unwrap_or_else(|_| EnvFilter::new("debug"));
+    let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("debug"));
 
     let _ = fmt()
         .with_env_filter(filter)
@@ -90,8 +89,7 @@ mod tests {
     #[test]
     fn init_tracing_does_not_panic_with_valid_level() {
         // This test verifies that the EnvFilter can be created from defaults.
-        let filter = EnvFilter::try_from_default_env()
-            .unwrap_or_else(|_| EnvFilter::new("info"));
+        let filter = EnvFilter::try_from_default_env().unwrap_or_else(|_| EnvFilter::new("info"));
         // The filter was created successfully
         drop(filter);
     }

@@ -63,12 +63,7 @@ where
 {
     /// Creates a new send message use case with the given port implementations.
     pub fn new(crypto: C, transport: T, storage: S, moderation: M) -> Self {
-        Self {
-            crypto,
-            transport,
-            storage,
-            moderation,
-        }
+        Self { crypto, transport, storage, moderation }
     }
 
     /// Executes the send message use case.
@@ -114,10 +109,7 @@ where
         // Note: In production, we'd create a proper Message entity here.
         // For now, this demonstrates the flow.
 
-        Ok(SendMessageOutput {
-            message_id: uuid::Uuid::new_v4(),
-            moderation_triggered: false,
-        })
+        Ok(SendMessageOutput { message_id: uuid::Uuid::new_v4(), moderation_triggered: false })
     }
 }
 
@@ -213,14 +205,14 @@ mod tests {
         let mut moderation_mock = MockModerationPortMock::new();
 
         // Moderation returns no violation
-        moderation_mock
-            .expect_analyze_content()
-            .returning(|_| Ok(ModerationResult {
+        moderation_mock.expect_analyze_content().returning(|_| {
+            Ok(ModerationResult {
                 violation_detected: false,
                 category: None,
                 confidence: 0.0,
                 explanation: "Clean content".to_string(),
-            }));
+            })
+        });
 
         // Crypto encrypts successfully
         crypto_mock.expect_encrypt_message().returning(|_, _| {
@@ -232,12 +224,8 @@ mod tests {
             .expect_send_message()
             .returning(|_, _| Ok(()));
 
-        let use_case = SendMessageUseCase::new(
-            crypto_mock,
-            transport_mock,
-            storage_mock,
-            moderation_mock,
-        );
+        let use_case =
+            SendMessageUseCase::new(crypto_mock, transport_mock, storage_mock, moderation_mock);
 
         let input = SendMessageInput {
             chat_id: ChatId::new("chat-1".to_string()),
@@ -260,21 +248,19 @@ mod tests {
         let mut moderation_mock = MockModerationPortMock::new();
 
         // Moderation detects a violation
-        moderation_mock
-            .expect_analyze_content()
-            .returning(|_| Ok(ModerationResult {
+        moderation_mock.expect_analyze_content().returning(|_| {
+            Ok(ModerationResult {
                 violation_detected: true,
-                category: Some(crate::application::ports::moderation_port::ModerationCategory::Extremism),
+                category: Some(
+                    crate::application::ports::moderation_port::ModerationCategory::Extremism,
+                ),
                 confidence: 0.95,
                 explanation: "Extremist content detected".to_string(),
-            }));
+            })
+        });
 
-        let use_case = SendMessageUseCase::new(
-            crypto_mock,
-            transport_mock,
-            storage_mock,
-            moderation_mock,
-        );
+        let use_case =
+            SendMessageUseCase::new(crypto_mock, transport_mock, storage_mock, moderation_mock);
 
         let input = SendMessageInput {
             chat_id: ChatId::new("chat-1".to_string()),

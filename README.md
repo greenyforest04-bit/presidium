@@ -66,6 +66,31 @@ domain ← application ← infrastructure
 - `application` depends on `domain` only
 - `infrastructure` implements `application` ports and uses `domain` types
 
+### Port Inventory
+
+| Port | Crate | Adapter | Purpose |
+|------|-------|---------|---------|
+| `E2EECryptoPort` | presidium-crypto | `LibSignalCryptoAdapter` | X3DH/PQXDH key agreement, Double Ratchet encrypt/decrypt |
+| `P2PNetworkPort` | presidium-p2p | `Libp2pNetworkAdapter` | Kademlia DHT, GossipSub, QUIC, Circuit Relay v2 |
+| `StoragePort` | presidium-storage | `RedbStorageAdapter` | High-level entity persistence (messages, chats) |
+| `MessageStoragePort` | presidium-storage | `RedbStorageAdapter` | Low-level ciphertext blob storage |
+| `MessageTransportPort` | presidium-messaging | — | Message delivery over P2P network |
+| `ModerationPort` | presidium-llm | `LocalModerationAdapter` | On-device content moderation + Sarcophagus |
+| `LLMPort` | presidium-llm | `CandleLlmAdapter` | GGUF model inference (candle.rs / llama-cpp-rs) |
+
+### Inter-Crate Dependencies
+
+```
+presidium-core ← presidium-crypto
+presidium-core ← presidium-p2p
+presidium-core ← presidium-storage
+presidium-core ← presidium-llm
+presidium-core ← presidium-messaging
+presidium-core ← presidium-bridge
+```
+
+No circular dependencies exist. All satellite crates depend only on `presidium-core`.
+
 ## Getting Started
 
 ### Prerequisites
@@ -119,6 +144,7 @@ cargo doc --workspace --open
 All significant architectural decisions are documented in `docs/adr/`:
 
 - [ADR 001: Cargo Workspace with Hexagonal Architecture](docs/adr/0001-use-workspace-hexagonal.md)
+- [ADR 002: Hexagonal Ports Definition](docs/adr/0002-hexagonal-ports-definition.md)
 
 ## License
 

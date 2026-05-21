@@ -6,9 +6,7 @@
 //! completed in subsequent development days.
 
 use async_trait::async_trait;
-use presidium_core::application::ports::crypto_port::{
-    CryptoError, E2EECryptoPort, PreKeyBundle,
-};
+use presidium_core::application::ports::crypto_port::{CryptoError, E2EECryptoPort, PreKeyBundle};
 use presidium_core::domain::value_objects::{DeviceId, SessionId, UserId};
 
 /// Adapter implementing `E2EECryptoPort` using the Signal Protocol.

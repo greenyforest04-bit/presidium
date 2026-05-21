@@ -83,13 +83,7 @@ pub struct InferenceConfig {
 
 impl Default for InferenceConfig {
     fn default() -> Self {
-        Self {
-            max_tokens: 512,
-            temperature: 0.7,
-            top_p: 0.9,
-            top_k: 40,
-            context_window: 4096,
-        }
+        Self { max_tokens: 512, temperature: 0.7, top_p: 0.9, top_k: 40, context_window: 4096 }
     }
 }
 

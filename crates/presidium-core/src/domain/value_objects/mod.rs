@@ -340,7 +340,8 @@ mod tests {
 
     #[test]
     fn message_id_display() {
-        let mid = MessageId::new(uuid::Uuid::parse_str("550e8400-e29b-41d4-a716-446655440000").unwrap());
+        let mid =
+            MessageId::new(uuid::Uuid::parse_str("550e8400-e29b-41d4-a716-446655440000").unwrap());
         assert!(format!("{mid}").contains("550e8400"));
     }
 

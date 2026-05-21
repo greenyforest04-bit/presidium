@@ -9,7 +9,9 @@
 //! 6. New value objects and ports are accessible and functional
 
 use presidium_core::application::ports::crypto_port::E2EECryptoPort;
-use presidium_core::application::ports::llm_port::{InferenceConfig, LLMError, LLMPort, Quantization};
+use presidium_core::application::ports::llm_port::{
+    InferenceConfig, LLMError, LLMPort, Quantization,
+};
 use presidium_core::application::ports::messaging_port::MessageTransportPort;
 use presidium_core::application::ports::moderation_port::{
     ContentVerdict, ModerationError, ModerationPort, ModerationResult,
@@ -19,7 +21,9 @@ use presidium_core::application::ports::storage_port::{
     MessageStoragePort, StoragePort, StoredMessage,
 };
 use presidium_core::domain::events::ModerationCategory;
-use presidium_core::domain::value_objects::{ChatId, DeviceId, MessageId, SessionId, Timestamp, UserId};
+use presidium_core::domain::value_objects::{
+    ChatId, DeviceId, MessageId, SessionId, Timestamp, UserId,
+};
 
 /// Verifies that all value objects can be constructed and used.
 /// This confirms the domain layer remains self-contained.
@@ -75,8 +79,9 @@ fn all_port_traits_are_send_sync() {
 #[test]
 fn all_port_error_types_are_defined() {
     // CryptoError
-    let _ =
-        presidium_core::application::ports::crypto_port::CryptoError::SessionNotFound("test".into());
+    let _ = presidium_core::application::ports::crypto_port::CryptoError::SessionNotFound(
+        "test".into(),
+    );
 
     // P2PError
     let _ = presidium_core::application::ports::p2p_port::P2PError::ConnectionFailed("test".into());

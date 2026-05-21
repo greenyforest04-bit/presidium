@@ -23,6 +23,10 @@ bytes = { workspace = true }
 tokio-test = { workspace = true }
 proptest = { workspace = true }
 mockall = { workspace = true }
+presidium-crypto = { path = "../presidium-crypto" }
+presidium-p2p = { path = "../presidium-p2p" }
+presidium-storage = { path = "../presidium-storage" }
+presidium-llm = { path = "../presidium-llm" }
 
 [lints]
 workspace = true
